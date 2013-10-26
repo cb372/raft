@@ -9,7 +9,7 @@ class MockPersistentState extends PersistentState {
   val votedFor = collection.mutable.Map.empty[Term, ServerId]
   val logs = collection.mutable.ArrayBuffer.empty[LogEntry]
 
-  logs(0) = null // logs are 1-indexed
+  logs += null // logs are 1-indexed
 
   def getCurrentTerm: Option[Term] = currentTerm
   def setCurrentTerm(term: Term): Unit = { currentTerm = Some(term) }
