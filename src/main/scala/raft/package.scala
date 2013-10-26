@@ -34,4 +34,9 @@ package object raft {
    */
   type SerialNumber = Long
 
+  /**
+   * A string representing some operation on the state machine.
+   * The state machine is responsible for parsing this string into a meaningful operation.
+   */
+  type Op = String
 }
