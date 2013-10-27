@@ -3,7 +3,6 @@ package actor
 
 import akka.actor.Actor
 import raft.actor.Messages.{RequestVoteReply, AppendEntries, RequestVote}
-import raft.PersistentState
 
 /**
  * Author: chris
@@ -36,7 +35,7 @@ class RaftServerActor(persistentState: PersistentState) extends Actor {
   def leader: Receive = ???
 
   def handleVoteRequest(term: Term, lastLogIndex: LogIndex, lastLogTerm: Term) {
-    var currentTerm = persistentState.getCurrentTerm.getOrElse(0L)
+    var currentTerm = persistentState.getCurrentTerm
     if (term < currentTerm) {
       // Reject because candidate is out of date
       sender ! RequestVoteReply(currentTerm, voteGranted = false)
@@ -63,7 +62,7 @@ class RaftServerActor(persistentState: PersistentState) extends Actor {
 
   def isLessUpToDateThanMe(theirLastLogIndex: LogIndex, theirLastLogTerm: Term): Boolean = {
     val myLastLogIndex = persistentState.getLastLogIndex
-    val myLastLogTerm = persistentState.getLogEntry(persistentState.getLastLogIndex).map(_.term).getOrElse(0L)
+    val myLastLogTerm = persistentState.getLastLogTerm
     // If the logs have last entries with different terms, then the log with the later term is more up-to-date.
     // If the logs end with the same term, then whichever log is longer is more up-to-date.
     theirLastLogTerm < myLastLogTerm || (theirLastLogTerm == myLastLogTerm && theirLastLogIndex < myLastLogIndex)

@@ -4,7 +4,7 @@ package raft
  * Author: chris
  * Created: 10/26/13
  */
-class MockPersistentState extends PersistentState {
+class MockPersistentDataStore extends PersistentDataStore {
   var currentTerm: Option[Term] = None
   val votedFor = collection.mutable.Map.empty[Term, ServerId]
   val logs = collection.mutable.ArrayBuffer.empty[LogEntry]
